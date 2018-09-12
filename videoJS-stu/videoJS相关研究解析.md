@@ -36,14 +36,14 @@
 <video
     id="my-player"
     class="video-js vjs-big-play-centered"
-    controls //控制栏
-    muted //静音
-    autoplay //自动播放
-    preload="metadata" //【metadata(加载视频元信息) | auto(加载视频数据) | none(不加载任务数据)】
-    poster="//vjs.zencdn.net/v/oceans.png" //封面
+    controls 								//控制栏
+    muted 									//静音
+    autoplay 								//自动播放
+    preload="metadata" 						//【metadata(加载视频元信息) | auto(加载视频数据) | none(不加载任务数据)】
+    poster="//vjs.zencdn.net/v/oceans.png" 	//封面
     width="600"
-    loop //是否循环播放
-    src="" //资源地址，或者使用source标签
+    loop 									//是否循环播放
+    src="" 									//资源地址，或者使用source标签
     height="400">
 </video>
 ```
