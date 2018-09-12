@@ -39,6 +39,7 @@
 		<button class="reset">reset</button>
 		<button class="volume">volume[0.5]</button>
 		<button class="dispose">dispose</button>
+		<button class="muted">muted[toggle]</button>
 	</div>
 
 	<div class="logtxt" style="width: 100%;height: 300px; overflow: auto;">
@@ -95,7 +96,7 @@
 				},
 				progressCall: function(){ //播放过程中持续监听
 					log('progress');
-				}
+				},
 			};
 
 			arr.forEach(function(el){
@@ -125,6 +126,11 @@
 
 			$('.volume').click(function(){
 				player.volume(.5);
+			});
+
+			$('.muted').click(function(){
+				var val = player.muted();
+				player.muted(!val);
 			});
 		}
 
