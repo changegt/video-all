@@ -1,0 +1,178 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>videoJS demo</title>
+</head>
+<body>
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	<!-- <script src="../src/video.js"></script>
+	<link rel="stylesheet" href="../css/video-js.min.css"> -->
+	<link rel="stylesheet" href="https://vjs.zencdn.net/7.1.0/video-js.css">
+	<script src="https://vjs.zencdn.net/7.1.0/video.js"></script>
+	
+	<video
+	    id="my-player"
+	    class="video-js vjs-big-play-centered"
+	    controls
+	    muted
+	    preload="metadata"
+	    poster="//vjs.zencdn.net/v/oceans.png"
+	    loop
+	    width="600"
+	    height="400">
+	  <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4"></source>
+	  <source src="//vjs.zencdn.net/v/oceans.webm" type="video/webm"></source>
+	  <source src="//vjs.zencdn.net/v/oceans.ogv" type="video/ogg"></source>
+	  <p class="vjs-no-js">
+	    To view this video please enable JavaScript, and consider upgrading to a
+	    web browser that
+	    <a href="http://videojs.com/html5-video-support/" target="_blank">
+	      supports HTML5 video
+	    </a>
+	  </p>
+	</video>
+
+	<div>
+		<button class="play">play</button>
+		<button class="pause">pause</button>
+		<button class="reload">reload</button>
+		<button class="reset">reset</button>
+		<button class="volume">volume[0.5]</button>
+		<button class="dispose">dispose</button>
+	</div>
+
+	<div class="logtxt" style="width: 100%;height: 300px; overflow: auto;">
+
+	</div>
+
+	<script type="text/javascript">
+		var player, listeners;
+		
+		$(document).ready(function(){
+			player = videojs('my-player', {}, function(){
+
+				listen();
+				event();
+
+				if(listeners.readyCall){
+					listeners.readyCall();
+				}
+			});
+
+			
+		});
+
+		function listen(){
+			var arr = ['loadstart','loadedmetadata','loadeddata','play','pause','ended','error'];
+
+			listeners = {
+				readyCall: function(){
+					log('readyCall');
+				},
+				loadedmetadataCall: function(){
+					log('loadedmetadata');	
+				},
+				playCall: function(){
+					log('play');
+				},
+				pauseCall: function(){
+					log('pause');
+				},
+				endedCall: function(){
+					log('ended');
+				},
+				errorCall: function(){
+					log('error');
+				},
+				loadstartCall: function(){
+					log('loadstart');	
+				},
+				loadeddataCall: function(){
+					log('loadeddata');
+				},
+				timeupdateCall: function(){ //时间更新
+					log('timeupdate:['+player.currentTime()+']');
+				},
+				progressCall: function(){ //播放过程中持续监听
+					log('progress');
+				}
+			};
+
+			arr.forEach(function(el){
+				player.on(el, listeners[el+'Call']);
+			});
+		}
+
+		function event(){
+			//事件
+			var $source = $('#my-player source');
+
+			var arr = ['play','pause','reset','dispose'];
+			//dispose videoJs实例销毁
+
+			arr.forEach(function(el){
+				$('.'+el).click(function(){
+					player[el]();
+				});
+			});
+
+			$('.reload').click(function(){
+				player.pause();
+				$source.attr('src', $('#my-player source').attr('src'));
+				player.load();
+				player.play();
+			});
+
+			$('.volume').click(function(){
+				player.volume(.5);
+			});
+		}
+
+		function log(str){			
+			$('.logtxt').append('<p>'+str+'</p>');
+		}
+
+	</script>
+
+	<style>
+		/*播放图标想显示圆形*/
+		.video-js .vjs-big-play-button{
+		    font-size: 2.5em;
+		    line-height: 2.3em;
+		    height: 2.5em;
+		    width: 2.5em;
+		    -webkit-border-radius: 2.5em;
+		    -moz-border-radius: 2.5em;
+		    border-radius: 2.5em;
+		    background-color: #73859f;
+		    background-color: rgba(115,133,159,.5);
+		    border-width: 0.15em;
+		    margin-top: -1.25em;
+		    margin-left: -1.75em;
+		}
+		/* 中间的播放箭头 */
+		.vjs-big-play-button .vjs-icon-placeholder {
+		    font-size: 1.63em;
+		}
+		/* 加载圆圈 */
+		.vjs-loading-spinner {
+		    font-size: 2.5em;
+		    width: 2em;
+		    height: 2em;
+		    border-radius: 1em;
+		    margin-top: -1em;
+		    margin-left: -1.5em;
+		}
+
+		/*进度显示当前的播放时间*/
+		.video-js .vjs-time-control{display:block;}
+		.video-js .vjs-remaining-time{display: none;}
+
+		/*暂停时候显示播放按钮*/
+		.vjs-paused .vjs-big-play-button,
+		.vjs-paused.vjs-has-started .vjs-big-play-button {
+		    display: block;
+		}
+	</style>
+</body>
+</html>
